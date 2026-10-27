@@ -667,4 +667,380 @@
                 <!-- Javascript will inject courses dynamically based on language -->
             </div>
         </div>
-        
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="reg-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h3 class="modal-title" id="modal-heading">التسجيل في الدورة عبر الواتساب</h3>
+            <form id="wa-form" onsubmit="sendToWhatsApp(event)">
+                <div class="form-group">
+                    <label id="lbl-name">الاسم</label>
+                    <input type="text" class="form-control" id="reg-firstname" required placeholder="أدخل اسمك">
+                </div>
+                <div class="form-group">
+                    <label id="lbl-surname">اللقب</label>
+                    <input type="text" class="form-control" id="reg-lastname" required placeholder="أدخل لقبك">
+                </div>
+                <div class="form-group">
+                    <label id="lbl-dob">تاريخ الميلاد</label>
+                    <input type="date" class="form-control" id="reg-dob" required>
+                </div>
+                <div class="form-group">
+                    <label id="lbl-phone">رقم الهاتف</label>
+                    <input type="tel" class="form-control" id="reg-phone" required placeholder="05XXXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label id="lbl-wilaya">الولاية</label>
+                    <input type="text" class="form-control" id="reg-wilaya" required placeholder="مثال: الجزائر العاصمة">
+                </div>
+                <button type="submit" class="submit-wa-btn">
+                    <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i> <span id="lbl-submit">إرسال التسجيل عبر الواتساب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="contact-info-footer">
+            <div><i class="fas fa-map-marker-alt"></i> الجزائر العاصمة (Alger - Algérie)</div>
+            <div><i class="fas fa-phone-alt"></i> 0549 57 59 42 | 0770 84 77 57 | 023 93 27 71</div>
+            <div><i class="fas fa-envelope"></i> ecole.cwh@gmail.com</div>
+        </div>
+        <p>© 2026 CENTRE DE FORMATION CWH. Tous droits réservés.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let currentLang = 'ar';
+        let selectedCourseName = '';
+
+        const translations = {
+            ar: {
+                dir: 'rtl',
+                navHome: 'الرئيسية',
+                navCourses: 'الدورات والتكوينات',
+                heroTitle: 'مدرسة التكوين المهني بالجزائر العاصمة',
+                heroDesc: 'نقدم لك تكوينات مهنية تطبيقية عالية المستوى مع شهادات معتمدة وتأطير من خبراء ومحترفين لتحقيق مستقبل مهني ناجح.',
+                discoverBtn: 'اكتشف الدورات',
+                featuresTitle: 'لماذا تختار مركزنا؟',
+                f1Title: 'ورشات تطبيقية 100%',
+                f1Desc: 'تطبيقات عملية حقيقية في ورشات مجهزة بأحدث المعدات والأدوات المهنية.',
+                f2Title: 'مجموعات صغيرة',
+                f2Desc: 'متابعة فردية دقيقة وموجهة لكل متدرب لضمان الاستيعاب الأقصى.',
+                f3Title: 'شهادة معتمدة',
+                f3Desc: 'شهادة مهنية مسلمة من مركز CWH تعزز سيرتك الذاتية وتفتح لك أبواب الشغل.',
+                f4Title: 'خبراء محترفون',
+                f4Desc: 'تأطير ومرافقة مستمرة من طرف طهاة وخبراء وحرفيين ذوي خبرة واسعة.',
+                coursesMainTitle: 'الدورات والبرامج التدريبية المتاحة',
+                registerBtn: 'سجل عبر الواتساب',
+                modalTitle: 'التسجيل في الدورة عبر الواتساب',
+                lblName: 'الاسم',
+                lblSurname: 'اللقب',
+                lblDob: 'تاريخ الميلاد',
+                lblPhone: 'رقم الهاتف',
+                lblWilaya: 'الولاية',
+                lblSubmit: 'إرسال التسجيل عبر الواتساب',
+                tipWa: 'اتصال واتساب استعجالي',
+                tipMap: 'موقعنا على جوجل مابس'
+            },
+            fr: {
+                dir: 'ltr',
+                navHome: 'Accueil',
+                navCourses: 'Nos Formations',
+                heroTitle: 'Centre de Formation Professionnelle à Alger',
+                heroDesc: 'Nous vous offrons des formations pratiques de haut niveau avec des diplômes reconnus et un encadrement par des experts.',
+                discoverBtn: 'Découvrir les formations',
+                featuresTitle: 'Pourquoi choisir notre centre ?',
+                f1Title: 'Ateliers 100% Pratiques',
+                f1Desc: 'Des applications pratiques réelles dans des ateliers équipés de matériel professionnel.',
+                f2Title: 'Petits Groupes',
+                f2Desc: 'Un suivi individuel et minutieux pour garantir une assimilation optimale.',
+                f3Title: 'Diplôme Reçu',
+                f3Desc: 'Un certificat professionnel délivré par CWH pour booster votre carrière.',
+                f4Title: 'Experts Professionnels',
+                f4Desc: 'Encadrement et accompagnement continu par des chefs et artisans qualifiés.',
+                coursesMainTitle: 'Nos Formations et Programmes Disponibles',
+                registerBtn: 'S’inscrire via WhatsApp',
+                modalTitle: 'Inscription à la formation via WhatsApp',
+                lblName: 'Nom',
+                lblSurname: 'Prénom',
+                lblDob: 'Date de naissance',
+                lblPhone: 'Numéro de téléphone',
+                lblWilaya: 'Wilaya',
+                lblSubmit: 'Envoyer l’inscription sur WhatsApp',
+                tipWa: 'WhatsApp Urgent',
+                tipMap: 'Google Maps'
+            }
+        };
+
+        const coursesData = [
+            {
+                id: 1,
+                icon: "fas fa-leaf",
+                img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في استخلاص الزيوت (Extraction des Huiles)",
+                titleFr: "Formation en Extraction des Huiles",
+                descAr: "اكتساب مهارات عملية ونظرية في استخراج الزيوت النباتية والعطرية والاستثمار في الموارد الطبيعية.",
+                descFr: "Acquisition de compétences pratiques et théoriques en extraction d'huiles végétales et essentielles.",
+                detailsAr: [
+                    "المدة: أسبوع واحد فقط",
+                    "اليوم 01: مقدمة في عالم الزيوت وخصائصها",
+                    "اليوم 02: طرق الاستخلاص (العصر، المذيبات، البخار)",
+                    "اليوم 03: التصفية، التنقية ومراقبة الجودة",
+                    "اليوم 04: التخزين، التعبئة والمعايير الصحية",
+                    "اليوم 05: التسويق وفرص الاستثمار للمشاريع الصغيرة"
+                ],
+                detailsFr: [
+                    "Durée: Une seule semaine",
+                    "Jour 01: Introduction au monde des huiles",
+                    "Jour 02: Méthodes d'extraction (Pression, solvants, vapeur)",
+                    "Jour 03: Filtration, purification et contrôle qualité",
+                    "Jour 04: Stockage, conditionnement et normes",
+                    "Jour 05: Marketing et opportunités d'investissement"
+                ]
+            },
+            {
+                id: 2,
+                icon: "fas fa-cut",
+                img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في الحلاقة وتصفيف الشعر (Coiffure)",
+                titleFr: "Formation en Coiffure & Soins Capillaires",
+                descAr: "تعلم مهنة التجميل وتصفيف الشعر وتحويل الشغف إلى مستقبل مهني ناجح.",
+                descFr: "Apprenez le métier de la beauté et de la coiffure pour réussir votre avenir professionnel.",
+                detailsAr: [
+                    "قص وتصفيف الشعر الاحترافي (Coupe & Brushing)",
+                    "تقنيات الصباغة الحديثة (Coloration)",
+                    "تسريحات عصرية لمختلف المناسبات (Coiffures modernes)",
+                    "العناية العميقة بالشعر (Soins capillaires)"
+                ],
+                detailsFr: [
+                    "Coupe et brushing professionnel",
+                    "Techniques de coloration modernes",
+                    "Coiffures modernes pour occasions",
+                    "Soins capillaires approfondis"
+                ]
+            },
+            {
+                id: 3,
+                icon: "fas fa-magic",
+                img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في الماكياج المهني (Maquillage)",
+                titleFr: "Formation en Maquillage Professionnel",
+                descAr: "احتراف فن الماكياج وتقنياته الحديثة لتصبح خبير تجميل معتمد.",
+                descFr: "Maîtrisez l'art du maquillage et ses techniques modernes pour devenir professionnel.",
+                detailsAr: [
+                    "تقنيات الماكياج اليومي وسهرات",
+                    "تحضير البشرة والعناية بها (Routine beauté)",
+                    "ماكياج العرائس والمناسبات الخاصة",
+                    "استخدام الأدوات والمعدات الاحترافية"
+                ],
+                detailsFr: [
+                    "Techniques de maquillage jour et soir",
+                    "Préparation et soin de la peau",
+                    "Maquillage de mariée et événements",
+                    "Utilisation du matériel professionnel"
+                ]
+            },
+            {
+                id: 4,
+                icon: "fas fa-birthday-cake",
+                img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في تحضير الإنتريمي (Entremets)",
+                titleFr: "Formation en Préparation d'Entremets",
+                descAr: "تعلم تقنيات الحلويات العصرية وصنع الإنتريمي الفاخر بلمسة احترافية.",
+                descFr: "Apprenez les techniques de pâtisserie moderne et réalisez des entremets d'exception.",
+                detailsAr: [
+                    "تقنيات وأساليب الحلويات الحديثة",
+                    "وصفات متنوعة وعصرية فاخرة",
+                    "تطبيقات عملية ومباشرة بالورشة",
+                    "مرافقة وإشراف من خبيرة محترفة"
+                ],
+                detailsFr: [
+                    "Techniques et méthodes modernes",
+                    "Recettes variées et raffinées",
+                    "Applications pratiques directes",
+                    "Encadrement par une formatrice experte"
+                ]
+            },
+            {
+                id: 5,
+                icon: "fas fa-hand-sparkles",
+                img: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في المانيكير والبديكير (Manucure & Pédicure)",
+                titleFr: "Formation en Manucure & Pédicure",
+                descAr: "تعلم فن العناية بالأظافر واكتشاف عالم الجمال والنظافة الصحية.",
+                descFr: "Apprenez l'art de la manucure et de la pédicure et découvrez le monde de la beauté.",
+                detailsAr: [
+                    "تقنيات حديثة (Classique, French, Nail art)",
+                    "تطبيق عملي مكثف على النماذج",
+                    "قواعد العناية والنظافة الصحية",
+                    "توفير مستلزمات وأدوات التكوين أثناء الدورة"
+                ],
+                detailsFr: [
+                    "Techniques modernes (Classique, French, Nail art)",
+                    "Application pratique intensive",
+                    "Soins et hygiène professionnelle",
+                    "Matériel pédagogique inclus"
+                ]
+            },
+            {
+                id: 6,
+                icon: "fas fa-utensils",
+                img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+                titleAr: "تكوين في فن الطبخ الأطباق التقليدية والعصرية (Cuisine)",
+                titleFr: "Formation en Cuisine (Traditionnelle & Moderne)",
+                descAr: "تعلم فن الطبخ واكتشاف أسرار الوصفات الناجحة بحرفية عالية.",
+                descFr: "Apprenez l'art culinaire et maîtrisez les recettes traditionnelles et modernes.",
+                detailsAr: [
+                    "تقنيات الطهي المختلفة والمتقدمة",
+                    "وصفات متنوعة (تقليدية وعصرية)",
+                    "ورشات تطبيقية ومباشرة في المطبخ",
+                    "إشراف ومرافقة من طهاة محترفين"
+                ],
+                detailsFr: [
+                    "Techniques de cuisson avancées",
+                    "Recettes variées (traditionnelles et modernes)",
+                    "Ateliers pratiques en cuisine",
+                    "Encadrement par des chefs expérimentés"
+                ]
+            }
+        ];
+
+        function switchView(viewName) {
+            document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
+            if(viewName === 'home') {
+                document.getElementById('home-view').classList.add('active');
+                document.getElementById('nav-btn-home').innerText = translations[currentLang].navCourses;
+                document.getElementById('nav-btn-home').setAttribute('onclick', "switchView('courses')");
+            } else {
+                document.getElementById('courses-view').classList.add('active');
+                document.getElementById('nav-btn-home').innerText = translations[currentLang].navHome;
+                document.getElementById('nav-btn-home').setAttribute('onclick', "switchView('home')");
+                renderCourses();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'fr' : 'ar';
+            const t = translations[currentLang];
+            
+            document.documentElement.setAttribute('dir', t.dir);
+            document.getElementById('hero-title').innerText = t.heroTitle;
+            document.getElementById('hero-desc').innerText = t.heroDesc;
+            document.getElementById('discover-btn-text').innerText = t.discoverBtn;
+            document.getElementById('features-title').innerText = t.featuresTitle;
+            document.getElementById('f1-title').innerText = t.f1Title;
+            document.getElementById('f1-desc').innerText = t.f1Desc;
+            document.getElementById('f2-title').innerText = t.f2Title;
+            document.getElementById('f2-desc').innerText = t.f2Desc;
+            document.getElementById('f3-title').innerText = t.f3Title;
+            document.getElementById('f3-desc').innerText = t.f3Desc;
+            document.getElementById('f4-title').innerText = t.f4Title;
+            document.getElementById('f4-desc').innerText = t.f4Desc;
+            document.getElementById('courses-main-title').innerText = t.coursesMainTitle;
+            
+            // Modal fields
+            document.getElementById('modal-heading').innerText = t.modalTitle;
+            document.getElementById('lbl-name').innerText = t.lblName;
+            document.getElementById('lbl-surname').innerText = t.lblSurname;
+            document.getElementById('lbl-dob').innerText = t.lblDob;
+            document.getElementById('lbl-phone').innerText = t.lblPhone;
+            document.getElementById('lbl-wilaya').innerText = t.lblWilaya;
+            document.getElementById('lbl-submit').innerText = t.lblSubmit;
+
+            // Tooltips
+            document.getElementById('tip-wa').setAttribute('data-tooltip', t.tipWa);
+            document.getElementById('tip-map').setAttribute('data-tooltip', t.tipMap);
+
+            // Nav button text update based on current view
+            const isHomeActive = document.getElementById('home-view').classList.contains('active');
+            document.getElementById('nav-btn-home').innerText = isHomeActive ? t.discoverBtn : t.navHome;
+
+            if(!isHomeActive) {
+                renderCourses();
+            }
+        }
+
+        function renderCourses() {
+            const container = document.getElementById('courses-list');
+            container.innerHTML = '';
+            
+            coursesData.forEach(course => {
+                const title = currentLang === 'ar' ? course.titleAr : course.titleFr;
+                const desc = currentLang === 'ar' ? course.descAr : course.descFr;
+                const details = currentLang === 'ar' ? course.detailsAr : course.detailsFr;
+                const btnText = translations[currentLang].registerBtn;
+
+                let detailsHtml = '<ul>';
+                details.forEach(item => {
+                    detailsHtml += `<li><i class="fas fa-check-circle"></i> ${item}</li>`;
+                });
+                detailsHtml += '</ul>';
+
+                const card = document.createElement('div');
+                card.className = 'course-card-detailed';
+                card.innerHTML = `
+                    <div class="course-img-wrapper">
+                        <img src="${course.img}" alt="${title}">
+                    </div>
+                    <div class="course-body">
+                        <div>
+                            <h3 class="course-title"><i class="${course.icon}"></i> ${title}</h3>
+                            <p class="course-desc">${desc}</p>
+                            <div class="course-details-box">
+                                ${detailsHtml}
+                            </div>
+                        </div>
+                        <button class="btn-primary" style="width: 100%; justify-content: center; animation: none;" onclick="openModal('${title.replace(/'/g, "\\'")}')">
+                            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> ${btnText}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openModal(courseTitle) {
+            selectedCourseName = courseTitle;
+            document.getElementById('reg-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('reg-modal').style.display = 'none';
+        }
+
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+            const firstname = document.getElementById('reg-firstname').value;
+            const lastname = document.getElementById('reg-lastname').value;
+            const dob = document.getElementById('reg-dob').value;
+            const phone = document.getElementById('reg-phone').value;
+            const wilaya = document.getElementById('reg-wilaya').value;
+
+            let msg = `السلام عليكم، أرغب في التسجيل لدورة تكوينية.\n\n`;
+            msg += `📚 الدورة: ${selectedCourseName}\n`;
+            msg += `👤 الاسم: ${firstname}\n`;
+            msg += `👤 اللقب: ${lastname}\n`;
+            msg += `📅 تاريخ الميلاد: ${dob}\n`;
+            msg += `📞 الهاتف: ${phone}\n`;
+            msg += `📍 الولاية: ${wilaya}`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            const whatsappNumber = "213549575942";
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMsg}`, '_blank');
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('reg-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
